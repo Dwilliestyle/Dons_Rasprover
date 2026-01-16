@@ -1,0 +1,51 @@
+# RaspRover Robot Parameters
+# Edit this file to configure your robot
+
+# Motor Driver Node Parameters
+motor_driver:
+  ros__parameters:
+    # === LEFT MOTOR GPIO PINS ===
+    # Update these based on your motor driver HAT wiring
+    left_pwm_pin: 12        # PWM output for left motors
+    left_dir1_pin: 20       # Direction control 1
+    left_dir2_pin: 21       # Direction control 2
+    
+    # === RIGHT MOTOR GPIO PINS ===
+    # Update these based on your motor driver HAT wiring
+    right_pwm_pin: 13       # PWM output for right motors
+    right_dir1_pin: 24      # Direction control 1
+    right_dir2_pin: 25      # Direction control 2
+    
+    # === PWM SETTINGS ===
+    pwm_frequency: 1000     # PWM frequency in Hz (1000 is typical)
+    pwm_range: 255          # PWM range (0-255 for most drivers)
+
+# Differential Drive Controller Parameters
+diff_drive_controller:
+  ros__parameters:
+    # === ROBOT PHYSICAL PARAMETERS ===
+    # These come from your URDF and should be accurate
+    wheel_radius: 0.040     # Wheel radius in meters (40mm)
+    wheel_track: 0.070      # Distance between left/right wheels in meters (70mm)
+    
+    # === MOTOR PERFORMANCE ===
+    # ⚠️  YOU MUST TUNE THIS PARAMETER! ⚠️
+    # This is the maximum RPM your motors can achieve
+    # Default is conservative - measure your actual motors
+    max_rpm: 100.0          # Maximum motor RPM
+    
+    # === CONTROL SETTINGS ===
+    pwm_max: 255            # Maximum PWM value to send
+    publish_rate: 20.0      # Odometry publish rate in Hz
+    
+# ESP32 Bridge Parameters
+esp32_bridge:
+  ros__parameters:
+    serial_port: '/dev/ttyAMA0'     # USB serial connection to ESP32
+    baud_rate: 115200
+    feedback_rate: 1000.0
+    min_angular_threshold: 0.2
+    low_voltage_threshold: 7.0
+    warning_cooldown: 10.0
+    cmd_vel_timeout: 0.5
+    oled_update_rate: 1.0

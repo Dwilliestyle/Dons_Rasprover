@@ -1,0 +1,16 @@
+encoder_odometry:
+  ros__parameters:
+    # Physical robot parameters
+    wheel_track: 0.070  # meters - distance between left and right wheel centers
+    
+    # Skid-steer correction factor
+    # For pure differential drive, this would be 1.0
+    # For skid-steer, tune empirically:
+    # - If robot turns less than expected, increase this value
+    # - If robot turns more than expected, decrease this value
+    # Start with 1.0 and adjust based on testing
+    skid_steer_factor: 1.0
+    
+    # Whether to publish TF transforms
+    # Set to false if using robot_localization or another source for odom->base_footprint
+    publish_tf: true
