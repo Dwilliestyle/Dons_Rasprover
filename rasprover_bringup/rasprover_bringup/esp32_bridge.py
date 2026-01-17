@@ -133,7 +133,6 @@ class ESP32Bridge(Node):
         # Subscribers for command data
         self.cmd_vel_sub_ = self.create_subscription(Twist, "cmd_vel", self.cmd_vel_callback, 10)
         self.joint_states_sub = self.create_subscription(JointState, 'ugv/joint_states', self.joint_states_callback, 10)
-        self.led_ctrl_sub = self.create_subscription(Float32MultiArray, 'ugv/led_ctrl', self.led_ctrl_callback, 10)
         
         # Create OLED update service
         self.oled_service = self.create_service(
@@ -297,17 +296,6 @@ class ESP32Bridge(Node):
         }
         self.base_controller.send_command(joint_data)
 
-    def led_ctrl_callback(self, msg):
-        IO4 = msg.data[0]
-        IO5 = msg.data[1]
-        
-        # Send LED control command to ESP32
-        led_ctrl_data = {
-            'T': 132, 
-            "IO4": IO4,
-            "IO5": IO5,
-        }
-        self.base_controller.send_command(led_ctrl_data)
 
 def main(args=None):
     rclpy.init(args=args)
