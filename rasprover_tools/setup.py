@@ -25,7 +25,6 @@ setup(
     entry_points={
         'console_scripts': [
             'keyboard_ctrl = rasprover_tools.keyboard_ctrl:main',
-            'joy_ctrl = rasprover_tools.joy_ctrl:main',
         ],
     },
 )
