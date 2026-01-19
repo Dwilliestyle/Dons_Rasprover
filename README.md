@@ -2,6 +2,8 @@
 
 ROS2 Jazzy workspace for my Waveshare Rasprover robot.
 
+![Rasprover](images/rasprover.jpg)
+
 ## Packages
 
 - **rasprover_msgs**: Custom messages and services (UpdateOLED service)
