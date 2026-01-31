@@ -9,7 +9,7 @@ encoder_odometry:
     # - If robot turns less than expected, increase this value
     # - If robot turns more than expected, decrease this value
     # Start with 1.0 and adjust based on testing
-    skid_steer_factor: 1.0
+    skid_steer_factor: 2.0
     
     # Whether to publish TF transforms
     # Set to false if using robot_localization or another source for odom->base_footprint
