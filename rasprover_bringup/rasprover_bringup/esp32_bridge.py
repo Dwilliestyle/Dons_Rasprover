@@ -7,6 +7,7 @@ import threading
 import rclpy
 from rclpy.node import Node
 import time
+import subprocess
 from std_msgs.msg import Header, Float32MultiArray, Float32
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu, MagneticField, JointState
@@ -98,6 +99,7 @@ class ESP32Bridge(Node):
         self.declare_parameter('low_voltage_threshold', 7.0)
         self.declare_parameter('warning_cooldown', 10.0)
         self.declare_parameter('cmd_vel_timeout', 0.5)
+        self.declare_parameter('enable_espeak', True)
         
         # Get parameters
         serial_port = self.get_parameter('serial_port').get_parameter_value().string_value
@@ -107,6 +109,7 @@ class ESP32Bridge(Node):
         self.low_voltage_threshold = self.get_parameter('low_voltage_threshold').get_parameter_value().double_value
         self.warning_cooldown = self.get_parameter('warning_cooldown').get_parameter_value().double_value
         self.cmd_vel_timeout = self.get_parameter('cmd_vel_timeout').get_parameter_value().double_value
+        self.enable_espeak = self.get_parameter('enable_espeak').get_parameter_value().bool_value
         
         # Log loaded parameters
         self.get_logger().info('ESP32 Bridge Parameters:')
@@ -116,6 +119,7 @@ class ESP32Bridge(Node):
         self.get_logger().info(f'  Min angular threshold: {self.min_angular_threshold} rad/s')
         self.get_logger().info(f'  Low voltage threshold: {self.low_voltage_threshold}V')
         self.get_logger().info(f'  Cmd_vel timeout: {self.cmd_vel_timeout}s')
+        self.get_logger().info(f'  Enable espeak: {self.enable_espeak}')
         
         # Initialize the base controller with the UART port and baud rate
         self.base_controller = BaseController(serial_port, baud_rate, self.get_logger())
@@ -252,6 +256,21 @@ class ESP32Bridge(Node):
         if 0.1 < voltage_value < self.low_voltage_threshold:
             if (current_time - self.last_warning_time) > self.warning_cooldown:
                 self.get_logger().warn(f'Low battery detected: {voltage_value}V')
+                
+                # Trigger espeak warning if enabled
+                if self.enable_espeak:
+                    try:
+                        voltage_rounded = round(voltage_value, 1)
+                        subprocess.Popen(
+                            ['espeak', '-v', 'en-us', '-s', '150', 
+                             f'Warning. Low battery. {voltage_rounded} volts'],
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL
+                        )
+                        self.get_logger().info(f'Espeak warning triggered: {voltage_rounded}V')
+                    except Exception as e:
+                        self.get_logger().error(f'Failed to trigger espeak: {e}')
+                
                 self.last_warning_time = current_time
 
     # ========== COMMAND/SUBSCRIPTION CALLBACKS ==========
