@@ -42,8 +42,7 @@
   <link name="camera_link">
     <visual>
       <geometry>
-        <!-- Simple camera representation - no mesh file for fixed camera -->
-        <cylinder radius="0.015" length="0.020"/>
+        <mesh filename="package://rasprover_description/meshes/pt_camera_link.stl"/>
       </geometry>
       <material name="black">
         <color rgba="0.1 0.1 0.1 1.0"/>
@@ -60,7 +59,7 @@
     <parent link="base_link"/>
     <child link="camera_link"/>
     <!-- Camera position: fixed mount on front of robot body -->
-    <origin xyz="0.065 0.0 0.086" rpy="0 1.55 0"/>
+    <origin xyz="0.050 0.0 0.086" rpy="0 0 0"/>
   </joint>
 
   <!-- Camera optical frame (for image processing) -->
