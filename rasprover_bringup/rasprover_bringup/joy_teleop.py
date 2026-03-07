@@ -75,7 +75,7 @@ class JoyTeleop(Node):
         # Button/axis mappings for different controllers
         # Format: [linear_gear_button, angular_gear_button, linear_axis, angular_axis]
         self.controller_config = {
-            "Xbox 360 Controller": [9, 10, 1, 2],              # Left stick Y, Right stick X
+            "Xbox 360 Controller": [9, 10, 1, 3],              # Left stick Y, Right stick X
             "SHANWAN Android Gamepad": [13, 14, 1, 2],         # Left stick Y, Right stick X
             "Xbox One Controller": [9, 10, 1, 3],              # Same as Xbox 360
             "Sony PLAYSTATION(R)3 Controller": [14, 15, 1, 2], # PS3 controller
@@ -95,7 +95,7 @@ class JoyTeleop(Node):
         if self.joystick not in self.controller_config:
             self.get_logger().warn(f"Unknown controller: {self.joystick}", throttle_duration_sec=5.0)
             # Use default config for unknown controllers (Xbox 360 layout)
-            config = [9, 10, 1, 2]
+            config = [9, 10, 1, 3]
         else:
             config = self.controller_config[self.joystick]
         
