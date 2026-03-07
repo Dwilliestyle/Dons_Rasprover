@@ -95,7 +95,7 @@ class JoyTeleop(Node):
         if self.joystick not in self.controller_config:
             self.get_logger().warn(f"Unknown controller: {self.joystick}", throttle_duration_sec=5.0)
             # Use default config for unknown controllers (Xbox 360 layout)
-            config = [9, 10, 1, 3]
+            config = [9, 10, 1, 2]
         else:
             config = self.controller_config[self.joystick]
         
