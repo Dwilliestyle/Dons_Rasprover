@@ -75,7 +75,7 @@ class JoyTeleop(Node):
         # Button/axis mappings for different controllers
         # Format: [linear_gear_button, angular_gear_button, linear_axis, angular_axis]
         self.controller_config = {
-            "Xbox 360 Controller": [9, 10, 1, 3],              # Left stick Y, Right stick X
+            "Xbox 360 Controller": [9, 10, 1, 2],              # Left stick Y, Right stick X
             "SHANWAN Android Gamepad": [13, 14, 1, 2],         # Left stick Y, Right stick X
             "Xbox One Controller": [9, 10, 1, 3],              # Same as Xbox 360
             "Sony PLAYSTATION(R)3 Controller": [14, 15, 1, 2], # PS3 controller
