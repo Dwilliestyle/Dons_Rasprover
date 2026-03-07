@@ -10,7 +10,7 @@ import time
 import subprocess
 from std_msgs.msg import Header, Float32MultiArray, Float32
 from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Imu, MagneticField, JointState
+from sensor_msgs.msg import Imu, MagneticField
 from rasprover_msgs.srv import UpdateOLED
 
 # Helper class for reading lines from a serial port
@@ -136,7 +136,6 @@ class ESP32Bridge(Node):
         
         # Subscribers for command data
         self.cmd_vel_sub_ = self.create_subscription(Twist, "cmd_vel", self.cmd_vel_callback, 10)
-        self.joint_states_sub = self.create_subscription(JointState, 'ugv/joint_states', self.joint_states_callback, 10)
         
         # Create OLED update service
         self.oled_service = self.create_service(
@@ -192,7 +191,7 @@ class ESP32Bridge(Node):
     
     def send_stop_command(self):
         """Send a stop command to the ESP32"""
-        data = {'T': '13', 'X': 0.0, 'Z': 0.0}
+        data = {'T': 13, 'X': 0.0, 'Z': 0.0}
         self.base_controller.send_command(data)
 
     # ========== FEEDBACK/PUBLISHING METHODS ==========
@@ -291,29 +290,8 @@ class ESP32Bridge(Node):
                 angular_velocity = -self.min_angular_threshold
 
         # Send velocity command to ESP32
-        data = {'T': '13', 'X': linear_velocity, 'Z': angular_velocity}
+        data = {'T': 13, 'X': linear_velocity, 'Z': angular_velocity}
         self.base_controller.send_command(data)
-
-    def joint_states_callback(self, msg):
-        # Extract joint positions and convert to degrees
-        name = msg.name
-        position = msg.position
-
-        x_rad = position[name.index('pt_base_link_to_pt_link1')]
-        y_rad = position[name.index('pt_link1_to_pt_link2')]
-
-        x_degree = (180 * x_rad) / 3.1415926
-        y_degree = (180 * y_rad) / 3.1415926
-
-        # Send joint command to ESP32
-        joint_data = {
-            'T': 134, 
-            'X': x_degree, 
-            'Y': y_degree, 
-            "SX": 600,
-            "SY": 600,
-        }
-        self.base_controller.send_command(joint_data)
 
 
 def main(args=None):
