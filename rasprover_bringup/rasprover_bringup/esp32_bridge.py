@@ -92,7 +92,7 @@ class ESP32Bridge(Node):
         super().__init__('esp32_bridge')
         
         # Declare parameters
-        self.declare_parameter('serial_port', '/dev/ttyAMA0')
+        self.declare_parameter('serial_port', '/dev/ttyAMA10')
         self.declare_parameter('baud_rate', 115200)
         self.declare_parameter('feedback_rate', 1000.0)
         self.declare_parameter('min_angular_threshold', 0.2)
