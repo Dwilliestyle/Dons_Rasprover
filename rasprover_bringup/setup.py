@@ -26,6 +26,7 @@ setup(
         'console_scripts': [
             'esp32_bridge = rasprover_bringup.esp32_bridge:main',
             'motor_test = rasprover_bringup.motor_test:main',
+            'joy_teleop = rasprover_bringup.joy_teleop:main'
         ],
     },
 )
