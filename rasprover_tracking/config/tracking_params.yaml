@@ -1,0 +1,59 @@
+# HSV Tracking Parameters for rasprover_vision
+# Tune these using the hsv_tuner node first!
+#
+# HSV ranges: Hue 0-179, Saturation 0-255, Value 0-255
+#
+# Common starting points:
+#   Red ball:    h_min=0,   h_max=10,  s_min=120, s_max=255, v_min=70, v_max=255
+#   Orange:      h_min=5,   h_max=20,  s_min=150, s_max=255, v_min=70, v_max=255
+#   Yellow:      h_min=20,  h_max=35,  s_min=100, s_max=255, v_min=70, v_max=255
+#   Green:       h_min=40,  h_max=80,  s_min=50,  s_max=255, v_min=50, v_max=255
+#   Blue:        h_min=100, h_max=130, s_min=100, s_max=255, v_min=50, v_max=255
+
+color_tracker:
+  ros__parameters:
+    # Camera device index (usually 0 for first USB cam)
+    camera_index: 0
+    camera_width: 640
+    camera_height: 480
+
+    # HSV color range to track — default: bright orange ball
+    h_min: 5
+    h_max: 20
+    s_min: 150
+    s_max: 255
+    v_min: 70
+    v_max: 255
+
+    # Minimum contour area in pixels (filters out noise)
+    min_contour_area: 500
+
+    # Publish a debug image with the detection drawn on it
+    publish_debug_image: true
+
+follow_controller:
+  ros__parameters:
+    # --- Turning gain (angular velocity per pixel of horizontal error) ---
+    # Increase if robot turns too slowly to track, decrease if it oscillates
+    kp_angular: 0.003
+
+    # --- Drive gain (linear velocity per pixel of size error) ---
+    # Controls how aggressively the robot approaches/retreats
+    kp_linear: 0.00005
+
+    # --- Desired target area in pixels (sets the standoff distance) ---
+    # Larger = robot stops closer; smaller = robot hangs back further
+    # Tune this to set how far away the robot tries to stay
+    target_area: 8000
+
+    # --- Speed limits ---
+    max_linear_speed: 0.25      # m/s  (keep conservative on first test)
+    max_angular_speed: 0.8      # rad/s
+
+    # --- Search behavior (when target is lost) ---
+    search_angular_speed: 0.4   # rad/s — how fast to spin while searching
+    search_timeout: 5.0         # seconds before giving up and stopping
+
+    # --- Dead zones (ignore tiny errors to prevent jitter) ---
+    angular_dead_zone: 20       # pixels — ignore horizontal error smaller than this
+    area_dead_zone: 500         # pixels² — ignore size error smaller than this
