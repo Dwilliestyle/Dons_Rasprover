@@ -12,6 +12,7 @@ ROS2 Jazzy workspace for my Waveshare Rasprover robot.
 - **rasprover_description**: URDF models and STL meshes
 - **rasprover_utils**: Battery monitor (INA219), OLED display client, safety stop
 - **rasprover_tools**: Joystick and keyboard teleoperation
+- **rasprover_tracking**: OpenCV camera work with object tracking and movement
 
 ## Hardware
 
