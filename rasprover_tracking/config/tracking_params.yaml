@@ -18,9 +18,9 @@ color_tracker:
     camera_height: 480
 
     # HSV color range to track — default: bright orange ball
-    h_min: 10
-    h_max: 87
-    s_min: 100
+    h_min: 40
+    h_max: 80
+    s_min: 50
     s_max: 255
     v_min: 50
     v_max: 255
