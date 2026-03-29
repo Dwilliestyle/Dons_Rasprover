@@ -18,12 +18,13 @@ color_tracker:
     camera_height: 480
 
     # HSV color range to track — default: bright orange ball
-    h_min: 40
-    h_max: 80
+    h_min: 101
+    h_max: 110
     s_min: 50
     s_max: 255
-    v_min: 50
+    v_min: 38
     v_max: 255
+    min_contour_area: 450 
 
     # Minimum contour area in pixels (filters out noise)
     min_contour_area: 500
@@ -55,5 +56,5 @@ follow_controller:
     search_timeout: 5.0         # seconds before giving up and stopping
 
     # --- Dead zones (ignore tiny errors to prevent jitter) ---
-    angular_dead_zone: 20       # pixels — ignore horizontal error smaller than this
+    angular_dead_zone: 8       # pixels — ignore horizontal error smaller than this
     area_dead_zone: 500         # pixels² — ignore size error smaller than this
