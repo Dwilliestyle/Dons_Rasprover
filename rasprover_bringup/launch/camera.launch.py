@@ -30,7 +30,7 @@ def generate_launch_description():
             'io_method': 'mmap',
         }],
         remappings=[
-            ('/usb_cam/image_raw', '/camera/color/image_raw'),
+            ('image_raw', '/camera/color/image_raw'),
         ],
     )
 
