@@ -2,7 +2,7 @@
 
 ROS2 Jazzy workspace for my Waveshare Rasprover robot.
 
-![Rasprover](images/20260119_204557.jpg)
+![Rasprover](images/20260719_212227.jpg)
 
 ## Packages
 
