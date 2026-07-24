@@ -96,7 +96,7 @@ class ESP32Bridge(Node):
         self.declare_parameter('baud_rate', 115200)
         self.declare_parameter('feedback_rate', 1000.0)
         self.declare_parameter('min_angular_threshold', 0.2)
-        self.declare_parameter('low_voltage_threshold', 7.0)
+        self.declare_parameter('low_voltage_threshold', 9.0)
         self.declare_parameter('warning_cooldown', 10.0)
         self.declare_parameter('cmd_vel_timeout', 0.5)
         self.declare_parameter('enable_espeak', True)
@@ -261,7 +261,7 @@ class ESP32Bridge(Node):
                     try:
                         voltage_rounded = round(voltage_value, 1)
                         subprocess.Popen(
-                            ['espeak', '-v', 'en-us', '-s', '150', 
+                            ['espeak', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120'
                              f'Warning. Low battery. {voltage_rounded} volts'],
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL
