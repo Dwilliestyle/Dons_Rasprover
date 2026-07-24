@@ -10,7 +10,6 @@ find_package(ament_cmake REQUIRED)
 
 # Install Python scripts
 install(PROGRAMS
-  scripts/battery_monitor.py
   scripts/oled_display.py
   scripts/safety_stop.py
   DESTINATION lib/${PROJECT_NAME}
