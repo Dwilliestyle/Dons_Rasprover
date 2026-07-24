@@ -19,8 +19,8 @@ class BatteryMonitor(Node):
         # Declare parameters
         self.declare_parameter('i2c_bus', 1)
         self.declare_parameter('ina219_address', 0x42)
-        self.declare_parameter('low_voltage_threshold', 10.0)
-        self.declare_parameter('critical_voltage_threshold', 9.5)
+        self.declare_parameter('low_voltage_threshold', 9.0)
+        self.declare_parameter('critical_voltage_threshold', 8.5)
         self.declare_parameter('min_voltage', 6.0)
         self.declare_parameter('max_voltage', 13.0)
         self.declare_parameter('update_rate', 5.0)  # Hz

@@ -261,7 +261,7 @@ class ESP32Bridge(Node):
                     try:
                         voltage_rounded = round(voltage_value, 1)
                         subprocess.Popen(
-                            ['espeak', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120'
+                            ['espeak', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120',
                              f'Warning. Low battery. {voltage_rounded} volts'],
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL
