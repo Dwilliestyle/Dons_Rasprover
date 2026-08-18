@@ -260,12 +260,28 @@ class ESP32Bridge(Node):
                 if self.enable_espeak:
                     try:
                         voltage_rounded = round(voltage_value, 1)
-                        subprocess.Popen(
-                            ['espeak', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120',
-                             f'Warning. Low battery. {voltage_rounded} volts'],
-                            stdout=subprocess.DEVNULL,
+                        text = f'Warning. Low battery. {voltage_rounded} volts'
+                        espeak_proc = subprocess.Popen(
+                            ['espeak', '--stdout', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120', text],
+                            stdout=subprocess.PIPE,
                             stderr=subprocess.DEVNULL
                         )
+                        aplay_proc = subprocess.Popen(
+                            ['aplay', '-D', 'plughw:USBAudio,0'],
+                            stdin=espeak_proc.stdout,
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.PIPE
+                        )
+                        espeak_proc.stdout.close()  # let aplay receive SIGPIPE if espeak exits early
+
+                        def _log_aplay_errors(proc, logger):
+                            err = proc.communicate()[1]
+                            if proc.returncode != 0:
+                                logger.error(f'aplay failed: {err.decode(errors="ignore")}')
+                        threading.Thread(
+                            target=_log_aplay_errors, args=(aplay_proc, self.get_logger()), daemon=True
+                        ).start()
+
                         self.get_logger().info(f'Espeak warning triggered: {voltage_rounded}V')
                     except Exception as e:
                         self.get_logger().error(f'Failed to trigger espeak: {e}')
