@@ -262,7 +262,7 @@ class ESP32Bridge(Node):
                         voltage_rounded = round(voltage_value, 1)
                         text = f'Warning. Low battery. {voltage_rounded} volts'
                         espeak_proc = subprocess.Popen(
-                            ['espeak', '--stdout', '-v', 'en-us', '-s', '150', '-p', '10', '-a', '120', text],
+                            ['espeak', '--stdout', '-v', 'en-us', '-s', '150', '-p', '70', '-a', '120', text],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.DEVNULL
                         )
