@@ -26,7 +26,7 @@ diff_drive_controller:
     # === ROBOT PHYSICAL PARAMETERS ===
     # These come from your URDF and should be accurate
     wheel_radius: 0.040     # Wheel radius in meters (40mm)
-    wheel_track: 0.070      # Distance between left/right wheels in meters (70mm)
+    wheel_track: 0.125      # Distance between left/right wheels in meters (70mm)
     
     # === MOTOR PERFORMANCE ===
     # ⚠️  YOU MUST TUNE THIS PARAMETER! ⚠️
