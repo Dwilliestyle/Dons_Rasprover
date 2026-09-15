@@ -45,7 +45,7 @@ follow_controller:
     # --- Desired target area in pixels (sets the standoff distance) ---
     # Larger = robot stops closer; smaller = robot hangs back further
     # Tune this to set how far away the robot tries to stay
-    target_area: 8000
+    target_area: 8000.0
 
     # --- Speed limits ---
     max_linear_speed: 0.25      # m/s  (keep conservative on first test)
@@ -56,5 +56,5 @@ follow_controller:
     search_timeout: 5.0         # seconds before giving up and stopping
 
     # --- Dead zones (ignore tiny errors to prevent jitter) ---
-    angular_dead_zone: 8       # pixels — ignore horizontal error smaller than this
-    area_dead_zone: 500         # pixels² — ignore size error smaller than this
+    angular_dead_zone: 8.0      # pixels — ignore horizontal error smaller than this
+    area_dead_zone: 500.0         # pixels² — ignore size error smaller than this
