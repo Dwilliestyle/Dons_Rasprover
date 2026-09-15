@@ -25,7 +25,7 @@ class EncoderOdometry(Node):
         super().__init__('encoder_odometry')
         
         # Declare parameters
-        self.declare_parameter('wheel_track', 0.070)  # meters - distance between left and right wheel centers
+        self.declare_parameter('wheel_track', 0.125)  # meters - distance between left and right wheel centers
         self.declare_parameter('skid_steer_factor', 1.0)  # Correction factor for skid-steer turning (tune empirically)
         self.declare_parameter('publish_tf', True)  # Whether to publish TF transforms
         
