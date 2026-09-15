@@ -19,6 +19,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -47,8 +48,12 @@ def generate_launch_description():
             parameters=[
                 params_file,
                 {
-                    'camera_index':        LaunchConfiguration('camera_index'),
-                    'publish_debug_image': LaunchConfiguration('publish_debug_image'),
+                    'camera_index': ParameterValue(
+                        LaunchConfiguration('camera_index'), value_type=int
+                    ),
+                    'publish_debug_image': ParameterValue(
+                        LaunchConfiguration('publish_debug_image'), value_type=bool
+                    ),
                 }
             ],
             output='screen',
