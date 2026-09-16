@@ -17,7 +17,7 @@ color_tracker:
     camera_width: 640
     camera_height: 480
 
-    # HSV color range to track — default: bright orange ball
+    # HSV color range to track — default: blue ball
     h_min: 101
     h_max: 110
     s_min: 50
