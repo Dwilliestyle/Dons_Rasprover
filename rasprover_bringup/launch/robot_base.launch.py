@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import os
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
@@ -30,6 +32,14 @@ def generate_launch_description():
         'config',
         'encoder_odometry_params.yaml'
     ])
+
+    robot_teleop = IncludeLaunchDescription(
+        os.path.join(get_package_share_directory("rasprover_bringup"),
+                     "launch",
+                     "teleop.launch.py"
+        ),
+    )
+
     
     esp32_bridge_node = Node(
         package='rasprover_bringup',
@@ -66,6 +76,7 @@ def generate_launch_description():
     
     return LaunchDescription([
         use_sim_time_arg,
+        robot_teleop,
         esp32_bridge_node,
         oled_display_node,
         encoder_odometry_node,
