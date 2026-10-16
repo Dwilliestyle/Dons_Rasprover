@@ -22,6 +22,7 @@ Parameters (from tracking_params.yaml):
   max_linear_speed, max_angular_speed
   search_angular_speed, search_timeout
   angular_dead_zone, area_dead_zone
+  lost_timeout  (seconds without a detection before switching to SEARCHING)
 """
 
 import rclpy
@@ -51,6 +52,7 @@ class FollowController(Node):
         self.declare_parameter('search_timeout',      5.0)
         self.declare_parameter('angular_dead_zone',   20.0)
         self.declare_parameter('area_dead_zone',      500.0)
+        self.declare_parameter('lost_timeout',        0.5)
 
         # --- State ---
         self.state             = FollowState.IDLE
@@ -99,7 +101,8 @@ class FollowController(Node):
         if self.last_seen_time is not None:
             elapsed = (now - self.last_seen_time).nanoseconds / 1e9
             search_timeout = self.get_parameter('search_timeout').value
-            if elapsed > 0.15 and self.state == FollowState.TRACKING:
+            lost_timeout   = self.get_parameter('lost_timeout').value
+            if elapsed > lost_timeout and self.state == FollowState.TRACKING:
                 self.get_logger().info('Target lost — SEARCHING')
                 self.state = FollowState.SEARCHING
             if elapsed > search_timeout and self.state == FollowState.SEARCHING:
