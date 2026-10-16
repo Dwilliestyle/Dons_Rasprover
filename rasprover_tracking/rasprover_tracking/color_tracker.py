@@ -90,6 +90,7 @@ class ColorTracker(Node):
     # ------------------------------------------------------------------
     def _open_camera(self):
         self.cap = cv2.VideoCapture(self.device_path, cv2.CAP_V4L2)
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 
