@@ -26,9 +26,8 @@ Parameters (from tracking_params.yaml):
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist, Point
 from rclpy.signals import SignalHandlerOptions
-
+from geometry_msgs.msg import Twist, Point
 
 
 class FollowState:
@@ -56,8 +55,8 @@ class FollowController(Node):
         # --- State ---
         self.state             = FollowState.IDLE
         self.last_seen_time    = None
-        self.last_target_x     = 0.0  # remember which way to search
-        self._latest_target = Point()
+        self.last_target_x     = 0.0      # remember which way to search
+        self._latest_target    = Point()  # safe default before first detection
 
         # --- ROS interfaces ---
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
@@ -172,6 +171,8 @@ class FollowController(Node):
 
 
 def main(args=None):
+    # Handle Ctrl-C ourselves so the context is still alive when we
+    # publish the final zero Twist — otherwise the stop never goes out.
     rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
     node = FollowController()
     try:
