@@ -27,7 +27,8 @@ Parameters (from tracking_params.yaml):
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, Point
-import math
+from rclpy.signals import SignalHandlerOptions
+
 
 
 class FollowState:
@@ -56,6 +57,7 @@ class FollowController(Node):
         self.state             = FollowState.IDLE
         self.last_seen_time    = None
         self.last_target_x     = 0.0  # remember which way to search
+        self._latest_target = Point()
 
         # --- ROS interfaces ---
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
@@ -170,7 +172,7 @@ class FollowController(Node):
 
 
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
     node = FollowController()
     try:
         rclpy.spin(node)
@@ -179,7 +181,7 @@ def main(args=None):
     finally:
         node._stop()
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
 
 
 if __name__ == '__main__':
