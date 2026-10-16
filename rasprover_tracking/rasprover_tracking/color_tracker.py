@@ -16,7 +16,7 @@ Published Topics:
       Annotated frame showing the detection circle and crosshair
 
 Parameters (from tracking_params.yaml):
-  camera_index, camera_width, camera_height
+  camera_device, camera_width, camera_height
   h_min, h_max, s_min, s_max, v_min, v_max
   min_contour_area
   publish_debug_image
