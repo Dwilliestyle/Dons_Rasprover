@@ -13,6 +13,7 @@
 color_tracker:
   ros__parameters:
     # Camera device index (usually 0 for first USB cam)
+    camera_device: /dev/v4l/by-id/usb-Generic_USB_Camera_200901010001-video-index0
     camera_index: 0
     camera_width: 640
     camera_height: 480
