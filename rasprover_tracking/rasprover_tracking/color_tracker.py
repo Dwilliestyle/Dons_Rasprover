@@ -40,7 +40,7 @@ class ColorTracker(Node):
         self.declare_parameter(
             'camera_device',
             '/dev/v4l/by-id/usb-Generic_USB_Camera_200901010001-video-index0')
-        self.declare_parameter('camera_index', 0)
+        
         self.declare_parameter('camera_width', 640)
         self.declare_parameter('camera_height', 480)
         self.declare_parameter('h_min', 5)
@@ -52,7 +52,7 @@ class ColorTracker(Node):
         self.declare_parameter('min_contour_area', 500)
         self.declare_parameter('publish_debug_image', True)
 
-        cam_idx   = self.get_parameter('camera_index').value
+        
         self.width  = self.get_parameter('camera_width').value
         self.height = self.get_parameter('camera_height').value
         self.publish_debug = self.get_parameter('publish_debug_image').value
@@ -62,19 +62,15 @@ class ColorTracker(Node):
         self._update_hsv_bounds()
 
         # --- Camera ---
-        self.cap = cv2.VideoCapture(cam_idx)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+        self.fail_count = 0
+        self._open_camera()
 
         if not self.cap.isOpened():
-            self.get_logger().error(
-                f'Could not open camera at index {cam_idx}. '
-                'Check that the USB webcam is connected and try index 1 if 0 fails.'
-            )
+            self.get_logger().error(f'Could not open camera at {self.device_path}')
             raise RuntimeError('Camera not available')
 
         self.get_logger().info(
-            f'Camera opened at index {cam_idx} ({self.width}x{self.height})'
+            f'Camera opened at {self.device_path} ({self.width}x{self.height})'
         )
 
         # --- Publishers ---
@@ -92,6 +88,17 @@ class ColorTracker(Node):
         self.get_logger().info('ColorTracker node started. Tracking active.')
 
     # ------------------------------------------------------------------
+    def _open_camera(self):
+        self.cap = cv2.VideoCapture(self.device_path, cv2.CAP_V4L2)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+
+    def _reopen_camera(self):
+        self.get_logger().warn('Reopening camera...')
+        self.cap.release()
+        self._open_camera()
+        self.fail_count = 0
+      
     def _update_hsv_bounds(self):
         """Read HSV params and build numpy arrays."""
         h_min = self.get_parameter('h_min').value
@@ -104,11 +111,16 @@ class ColorTracker(Node):
         self.upper_hsv = np.array([h_max, s_max, v_max], dtype=np.uint8)
 
     # ------------------------------------------------------------------
-    def process_frame(self):
+     def _process_freme(self):       
         ret, frame = self.cap.read()
         if not ret:
-            self.get_logger().warn('Failed to read frame from camera.')
+            self.fail_count += 1
+            self.get_logger().warn('Failed to read frame from camera.',
+                                   throttle_duration_sec=2.0)
+            if self.fail_count >= 15:
+                self._reopen_camera()
             return
+        self.fail_count = 0
 
         min_area = self.get_parameter('min_contour_area').value
         cx = self.width  // 2
@@ -191,7 +203,7 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
 
 
 if __name__ == '__main__':
