@@ -111,7 +111,7 @@ class ColorTracker(Node):
         self.upper_hsv = np.array([h_max, s_max, v_max], dtype=np.uint8)
 
     # ------------------------------------------------------------------
-     def _process_freme(self):       
+    def _process_frame(self):       
         ret, frame = self.cap.read()
         if not ret:
             self.fail_count += 1
