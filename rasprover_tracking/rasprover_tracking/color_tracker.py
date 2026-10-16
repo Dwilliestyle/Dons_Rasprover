@@ -83,7 +83,7 @@ class ColorTracker(Node):
             )
 
         # --- Timer: run at ~30 Hz ---
-        self.timer = self.create_timer(1.0 / 30.0, self.process_frame)
+        self.timer = self.create_timer(1.0 / 30.0, self._process_frame)
 
         self.get_logger().info('ColorTracker node started. Tracking active.')
 
