@@ -37,6 +37,9 @@ class ColorTracker(Node):
         super().__init__('color_tracker')
 
         # --- Parameters ---
+        self.declare_parameter(
+            'camera_device',
+            '/dev/v4l/by-id/usb-Generic_USB_Camera_200901010001-video-index0')
         self.declare_parameter('camera_index', 0)
         self.declare_parameter('camera_width', 640)
         self.declare_parameter('camera_height', 480)
@@ -53,6 +56,7 @@ class ColorTracker(Node):
         self.width  = self.get_parameter('camera_width').value
         self.height = self.get_parameter('camera_height').value
         self.publish_debug = self.get_parameter('publish_debug_image').value
+        self.device_path = self.get_parameter('camera_device').value
 
         # Build HSV bounds arrays
         self._update_hsv_bounds()
