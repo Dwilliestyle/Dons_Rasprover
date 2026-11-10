@@ -92,6 +92,24 @@ def generate_launch_description():
             {'angle_crop_max': 225.0},
         ]
     )
+
+    # base_footprint (ground) -> base_link (chassis center)
+    base_link_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='footprint_to_base_link_tf',
+        arguments=['--x', '0.0', '--y', '0.0', '--z', '0.04',
+                   '--frame-id', 'base_footprint', '--child-frame-id', 'base_link'],
+    )
+
+    # base_link -> laser_frame (LD19 mount position)
+    laser_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='base_link_to_laser_tf',
+        arguments=['--x', '0.0', '--y', '0.0', '--z', '0.08',
+                   '--frame-id', 'base_link', '--child-frame-id', 'laser_frame'],
+    )
     
     return LaunchDescription([
         use_sim_time_arg,
@@ -100,4 +118,6 @@ def generate_launch_description():
         oled_display_node,
         encoder_odometry_node,
         lidar_node,
+        base_link_tf_node,
+        laser_tf_node
     ])
