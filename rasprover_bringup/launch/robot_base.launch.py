@@ -73,6 +73,25 @@ def generate_launch_description():
             {'use_sim_time': LaunchConfiguration('use_sim_time')}
         ]
     )
+
+    # LD19 LIDAR
+    lidar_node = Node(
+        package='ldlidar_stl_ros2',
+        executable='ldlidar_stl_ros2_node',
+        name='LD19',
+        output='screen',
+        parameters=[
+            {'product_name': 'LDLiDAR_LD19'},
+            {'topic_name': 'scan'},
+            {'frame_id': 'laser_frame'},
+            {'port_name': '/dev/ttyACM0'},
+            {'port_baudrate': 230400},
+            {'laser_scan_dir': True},
+            {'enable_angle_crop_func': False},
+            {'angle_crop_min': 135.0},
+            {'angle_crop_max': 225.0},
+        ]
+    ),
     
     return LaunchDescription([
         use_sim_time_arg,
@@ -80,4 +99,5 @@ def generate_launch_description():
         esp32_bridge_node,
         oled_display_node,
         encoder_odometry_node,
+        lidar_node,
     ])
