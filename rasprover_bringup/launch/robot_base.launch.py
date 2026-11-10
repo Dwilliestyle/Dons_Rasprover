@@ -91,7 +91,7 @@ def generate_launch_description():
             {'angle_crop_min': 135.0},
             {'angle_crop_max': 225.0},
         ]
-    ),
+    )
     
     return LaunchDescription([
         use_sim_time_arg,
