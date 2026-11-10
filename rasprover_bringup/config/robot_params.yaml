@@ -3,7 +3,7 @@ esp32_bridge:
   ros__parameters:
     serial_port: '/dev/ttyAMA0'     # Hardware UART (GPIO) connection to ESP32
     baud_rate: 115200
-    feedback_rate: 1000.0
+    feedback_rate: 100.0
     min_angular_threshold: 0.2
     low_voltage_threshold: 9.0
     warning_cooldown: 10.0

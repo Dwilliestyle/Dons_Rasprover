@@ -6,6 +6,8 @@ from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import Command
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     """
@@ -14,6 +16,12 @@ def generate_launch_description():
     - OLED display (visual status display)
     - Encoder odometry (calculates pose from wheel encoders)
     """
+
+    urdf_file = PathJoinSubstitution([
+        FindPackageShare('rasprover_description'),
+        'urdf',
+        'dons_rasprover.urdf'          # <-- adjust to the actual filename
+    ])
     
     use_sim_time_arg = DeclareLaunchArgument(
         'use_sim_time',
@@ -74,6 +82,22 @@ def generate_launch_description():
         ]
     )
 
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[{
+            'robot_description': ParameterValue(Command(['xacro ', urdf_file]), value_type=str),
+            'use_sim_time': LaunchConfiguration('use_sim_time'),
+        }]
+    )
+
+    joint_state_publisher_node = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        output='screen',
+    )
+
     # LD19 LIDAR
     lidar_node = Node(
         package='ldlidar_stl_ros2',
@@ -93,23 +117,7 @@ def generate_launch_description():
         ]
     )
 
-    # base_footprint (ground) -> base_link (chassis center)
-    base_link_tf_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='footprint_to_base_link_tf',
-        arguments=['--x', '0.0', '--y', '0.0', '--z', '0.04',
-                   '--frame-id', 'base_footprint', '--child-frame-id', 'base_link'],
-    )
-
-    # base_link -> laser_frame (LD19 mount position)
-    laser_tf_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='base_link_to_laser_tf',
-        arguments=['--x', '0.0', '--y', '0.0', '--z', '0.08',
-                   '--frame-id', 'base_link', '--child-frame-id', 'laser_frame'],
-    )
+    
     
     return LaunchDescription([
         use_sim_time_arg,
@@ -117,7 +125,7 @@ def generate_launch_description():
         esp32_bridge_node,
         oled_display_node,
         encoder_odometry_node,
+        robot_state_publisher_node,
+        joint_state_publisher_node,
         lidar_node,
-        base_link_tf_node,
-        laser_tf_node
     ])
